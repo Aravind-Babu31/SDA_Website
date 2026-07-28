@@ -48,6 +48,59 @@ Then open:
 http://localhost:8000
 ```
 
+## Google Sheets Integration for Enquiries
+
+Enquiry form submissions on `contact.html` can automatically log into a Google Sheet so the academy owner can view all leads in real time.
+
+### How to set up Google Sheets (3-step setup):
+
+1. **Create a Google Sheet**:
+   - Open [Google Sheets](https://sheets.google.com) and create a new blank spreadsheet (e.g. named `Sri Durka Academy Enquiries`).
+   - In Row 1, add these headers: `Timestamp | Name | Phone | Email | Interested Program | Message`
+
+2. **Add Apps Script**:
+   - Click **Extensions** > **Apps Script**.
+   - Delete any existing code in `Code.gs` and paste the following script:
+
+   ```javascript
+   function doPost(e) {
+     try {
+       var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+       var data = e.parameter;
+       
+       if (e.postData && e.postData.contents) {
+         try {
+           var parsed = JSON.parse(e.postData.contents);
+           data = parsed;
+         } catch(err) {}
+       }
+
+       var timestamp = data.timestamp || new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+       var name = data.name || "";
+       var phone = data.phone || "";
+       var email = data.email || "";
+       var interest = data.interest || "";
+       var message = data.message || "";
+
+       sheet.appendRow([timestamp, name, phone, email, interest, message]);
+
+       return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
+         .setMimeType(ContentService.MimeType.JSON);
+     } catch (error) {
+       return ContentService.createTextOutput(JSON.stringify({ "result": "error", "message": error.toString() }))
+         .setMimeType(ContentService.MimeType.JSON);
+     }
+   }
+   ```
+
+3. **Deploy as Web App**:
+   - Click **Deploy** > **New deployment**.
+   - Select type: **Web app**.
+   - Set **Execute as**: *Me*.
+   - Set **Who has access**: *Anyone*.
+   - Click **Deploy**, authorize permissions, and copy the **Web app URL**.
+   - Paste your Web App URL into `js/main.js` (`var GOOGLE_SHEET_SCRIPT_URL = "YOUR_WEB_APP_URL";`) or directly in `contact.html` (`data-sheet-url="YOUR_WEB_APP_URL"`).
+
 ## Contact
 
 Sri Durka Academy

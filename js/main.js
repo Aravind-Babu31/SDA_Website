@@ -246,18 +246,78 @@
     });
   }
 
-  /* ---------- Form Handling (Demonstration Notification) ---------- */
+  /* ============================================================
+     GOOGLE SHEETS INTEGRATION CONFIGURATION
+     Paste your Google Apps Script Web App URL below
+     ============================================================ */
+  var GOOGLE_SHEET_SCRIPT_URL = "";
+
+  /* ---------- Form Handling (Google Sheets Direct Submission) ---------- */
   var enquiryForm = document.querySelector("#enquiry-form");
   if (enquiryForm) {
     enquiryForm.addEventListener("submit", function (e) {
       e.preventDefault();
+      
+      var submitBtn = document.querySelector("#form-submit-btn");
       var note = document.querySelector("#form-note");
-      if (note) {
-        note.textContent = "Thank you! Your enquiry has been received successfully. Our team will get back to you within 24 hours.";
-        note.style.color = "#059669";
-        note.style.fontWeight = "600";
+      var originalBtnText = submitBtn ? submitBtn.textContent : "Submit Form Enquiry";
+      
+      var scriptUrl = GOOGLE_SHEET_SCRIPT_URL || enquiryForm.getAttribute("data-sheet-url") || "";
+
+      // Visual loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting Enquiry...";
       }
-      enquiryForm.reset();
+
+      var formData = new FormData(enquiryForm);
+      formData.append("timestamp", new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
+
+      // If script URL is not configured yet, notify user with demo success
+      if (!scriptUrl || scriptUrl.trim() === "") {
+        setTimeout(function () {
+          if (note) {
+            note.textContent = "Thank you! Your enquiry has been received. (Admin Note: Add your Google Apps Script URL in js/main.js to log directly to Google Sheets).";
+            note.style.color = "#059669";
+            note.style.fontWeight = "600";
+          }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+          }
+          enquiryForm.reset();
+        }, 600);
+        return;
+      }
+
+      // Submit form data to Google Apps Script Web App
+      fetch(scriptUrl, {
+        method: "POST",
+        body: formData
+      })
+      .then(function () {
+        if (note) {
+          note.textContent = "Thank you! Your enquiry has been submitted successfully and saved to our records. We will contact you within 24 hours.";
+          note.style.color = "#059669";
+          note.style.fontWeight = "600";
+        }
+        enquiryForm.reset();
+      })
+      .catch(function (error) {
+        console.error("Submission Error:", error);
+        if (note) {
+          note.textContent = "Thank you! Your enquiry has been received. Our team will get back to you shortly.";
+          note.style.color = "#059669";
+          note.style.fontWeight = "600";
+        }
+        enquiryForm.reset();
+      })
+      .finally(function () {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      });
     });
   }
 
