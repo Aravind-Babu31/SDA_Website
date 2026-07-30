@@ -248,9 +248,12 @@
 
   /* ============================================================
      GOOGLE SHEETS INTEGRATION CONFIGURATION
-     Paste your Google Apps Script Web App URL below
+     Paste your Google Apps Script Web App URL below.
+     Example: https://script.google.com/macros/s/ABCDEFGHIJK123456789/exec
+     If you leave the placeholder as-is, the form will still show a thank-you message
+     but it will not submit to Google Sheets until a real URL is configured.
      ============================================================ */
-  var GOOGLE_SHEET_SCRIPT_URL = "";
+  var GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJH0Re9jTZNOeA8OI04d3cia8y6cREk6UHbbjZ8FnLUElvCWGGxPVCDbQILuVGAYam/exec";
 
   /* ---------- Form Handling (Google Sheets Direct Submission) ---------- */
   var enquiryForm = document.querySelector("#enquiry-form");
