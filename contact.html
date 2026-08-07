@@ -7,6 +7,9 @@
   <meta name="description" content="Reach out to Sri Durka Academy branches in Krishnankovil and Watrap to enquire about computer courses, board tuition, abacus, or spoken English/Hindi classes.">
   <link rel="icon" type="image/png" href="images/favicon-192.png">
   <link rel="apple-touch-icon" href="images/favicon-512.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -126,42 +129,61 @@
             <h3>Send an Enquiry</h3>
             <p>Tell us which program you want to explore — computer courses, board tuition, abacus, or spoken classes — and we will respond within 24 hours.</p>
             
-            <form id="enquiry-form" autocomplete="on" data-sheet-url="<YOUR_GOOGLE_SHEET_SCRIPT_URL_HERE>">
+            <form id="enquiry-form" autocomplete="on" data-sheet-url="https://script.google.com/macros/s/AKfycby96rP18Gf5pMBH0xacdoSYBR_yKmTefNRpXPrK4qEKKpbK62tz0IfOW6dpZWy5eEc/exec" novalidate>
+              <!-- Form Alert Banner -->
+              <div id="form-alert" class="form-alert" style="display: none;" role="alert"></div>
+
               <div class="form-row">
                 <div class="field">
-                  <label for="name">Full Name</label>
-                  <input type="text" id="name" name="name" placeholder="E.g., Vijay Prakash" autocomplete="name" required>
+                  <label for="name">Full Name <span class="required-star">*</span></label>
+                  <input type="text" id="name" name="name" placeholder="E.g., Vijay Prakash" autocomplete="name" required minlength="2">
+                  <span class="error-msg" id="name-error"></span>
                 </div>
                 
                 <div class="field">
-                  <label for="phone">Phone Number</label>
-                  <input type="tel" id="phone" name="phone" placeholder="E.g., 9876543210" autocomplete="tel" required>
+                  <label for="phone">Phone Number <span class="required-star">*</span></label>
+                  <input type="tel" id="phone" name="phone" placeholder="E.g., 9876543210" autocomplete="tel" required pattern="^[6-9]\d{9}$" maxlength="10" title="10-digit mobile number starting with 6, 7, 8, or 9">
+                  <span class="error-msg" id="phone-error"></span>
                 </div>
               </div>
               
               <div class="form-row">
                 <div class="field">
-                  <label for="email">Email Address</label>
-                  <input type="email" id="email" name="email" placeholder="E.g., you@example.com" autocomplete="email">
+                  <label for="email">Email Address <span class="required-star">*</span></label>
+                  <input type="email" id="email" name="email" placeholder="E.g., name@example.com" autocomplete="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Valid email address (e.g. name@example.com)">
+                  <span class="error-msg" id="email-error"></span>
                 </div>
                 
                 <div class="field">
-                  <label for="interest">Interested Program</label>
-                  <select id="interest" name="interest">
-                    <option>Tuition (1st – 12th Std)</option>
-                    <option>Advanced Abacus Training</option>
-                    <option>Spoken Class (English/Hindi)</option>
-                    <option>DCA / Computer Fundamentals</option>
-                    <option>Full Stack Coding Track</option>
-                    <option>AI, ML &amp; Cyber Security</option>
-                    <option>Photoshop &amp; Graphic Layouts</option>
-                    <option>Final Year Project Mentorship</option>
+                  <label for="branch">Preferred Branch <span class="required-star">*</span></label>
+                  <select id="branch" name="branch" required>
+                    <option value="" disabled selected>Select Branch...</option>
+                    <option value="Krishnankovil Branch">Krishnankovil Branch</option>
+                    <option value="Watrap Branch">Watrap Branch</option>
+                    <option value="Online Live Batch">Online Live Batch</option>
                   </select>
+                  <span class="error-msg" id="branch-error"></span>
                 </div>
+              </div>
+
+              <div class="field">
+                <label for="interest">Interested Program <span class="required-star">*</span></label>
+                <select id="interest" name="interest" required>
+                  <option value="" disabled selected>Select Program...</option>
+                  <option value="Board Tuition (1st – 12th Std)">Board Tuition (1st – 12th Std)</option>
+                  <option value="Advanced Abacus Training">Advanced Abacus Training</option>
+                  <option value="Spoken Class (English/Hindi)">Spoken Class (English/Hindi)</option>
+                  <option value="DCA / Computer Fundamentals">DCA / Computer Fundamentals</option>
+                  <option value="Full Stack Coding Track">Full Stack Coding Track</option>
+                  <option value="AI, ML &amp; Cyber Security">AI, ML &amp; Cyber Security</option>
+                  <option value="Advanced Tally Prime with GST">Advanced Tally Prime with GST</option>
+                  <option value="Final Year Project Mentorship">Final Year Project Mentorship</option>
+                </select>
+                <span class="error-msg" id="interest-error"></span>
               </div>
               
               <div class="field">
-                <label for="message">Detailed Message</label>
+                <label for="message">Detailed Message <span class="optional-tag">(Optional)</span></label>
                 <textarea id="message" name="message" placeholder="Provide details such as the student's school standard, preferred timings (morning/evening), or career goals."></textarea>
               </div>
               
